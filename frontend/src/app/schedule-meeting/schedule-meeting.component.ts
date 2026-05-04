@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MeetingService } from '../services/meeting.service';
+import { MeetingService } from '../../services/meeting.service';
 
 @Component({
   selector: 'app-schedule-meeting',
