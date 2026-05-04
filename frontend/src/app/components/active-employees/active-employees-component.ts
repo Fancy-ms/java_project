@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { EmployeeService } from '../../services/employee.service';
+import { EmployeeService } from '../../Services/employee.service';
 import { Employee } from '../../models/employee';
 
 @Component({
@@ -43,7 +43,7 @@ export class ActiveEmployeesComponent implements OnInit {
         this.loading = false;
       },
 
-      error: (err) => {
+      error: (err: any) => {
         console.error("API ERROR:", err);
         this.loading = false;
       }
