@@ -11,7 +11,7 @@ import { MeetingService } from '../services/meeting.service';
 })
 export class ScheduleMeetingComponent {
 
-  // ================= FORM MODEL =================
+  // ================= FORM MODEL ================
   meeting = {
     title: '',
     date: '',
