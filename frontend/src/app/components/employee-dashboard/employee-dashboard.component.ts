@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { LeaveService } from '../../services/leave.service';
-import { AuthService } from '../../services/auth.service';
+import { LeaveService } from '../../Services/leave.service';
+import { AuthService } from '../../Services/auth.service';
 import { DashboardStats } from '../../models/leave.model';
 
 @Component({
