@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { EmployeeService } from '../../Services/employee.service';
+import { EmployeeService } from '../../services/employee.service';
 import { Employee } from '../../models/employee';
 
 @Component({
