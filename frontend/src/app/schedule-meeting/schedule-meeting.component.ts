@@ -6,8 +6,7 @@ import { MeetingService } from '../../services/meeting.service';
   selector: 'app-schedule-meeting',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './schedule-meeting.component.html',
-  styleUrls: ['./schedule-meeting.component.css']
+  templateUrl: './schedule-meeting.component.html'
 })
 export class ScheduleMeetingComponent {
 
