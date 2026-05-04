@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { LeaveService } from '../../services/leave.service';
-import { AuthService } from '../../services/auth.service';
+import { LeaveService } from '../../Services/leave.service';
+import { AuthService } from '../../Services/auth.service';
 import { LeaveType } from '../../models/leave.model';
 
 @Component({
