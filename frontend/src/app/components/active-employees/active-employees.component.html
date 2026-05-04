@@ -1,0 +1,79 @@
+<div class="p-6 text-white">
+
+  <!-- HEADER -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Active Employees</h2>
+
+    <span class="text-sm text-gray-400">
+      Total: {{ filteredEmployees.length }}
+    </span>
+  </div>
+
+  <!-- 🔍 SEARCH -->
+  <input
+    type="text"
+    [(ngModel)]="searchQuery"
+    (input)="triggerSearch()"
+    placeholder="Search by name, email, department..."
+    class="w-full p-3 mb-4 rounded-xl bg-white/10 border border-white/20 outline-none"
+  />
+
+  <!-- ⏳ LOADING -->
+  <div *ngIf="loading" class="text-gray-400 text-center py-10">
+    Loading employees...
+  </div>
+
+  <!-- ❌ EMPTY STATE -->
+  <div *ngIf="!loading && filteredEmployees.length === 0"
+       class="text-center text-gray-400 py-10">
+    No active employees found
+  </div>
+
+  <!-- 📋 TABLE VIEW (BEST FOR LARGE DATA) -->
+  <div *ngIf="!loading && filteredEmployees.length > 0"
+       class="overflow-auto rounded-xl border border-white/10">
+
+    <table class="w-full text-sm">
+
+      <thead class="bg-white/10 text-left">
+        <tr>
+          <th class="p-3">Name</th>
+          <th class="p-3">Email</th>
+          <th class="p-3">Department</th>
+          <th class="p-3">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let emp of filteredEmployees; trackBy: trackById"
+            class="border-t border-white/10 hover:bg-white/5">
+
+          <td class="p-3 font-medium">{{ emp.name }}</td>
+          <td class="p-3 text-gray-300">{{ emp.email }}</td>
+          <td class="p-3 text-gray-400">{{ emp.department }}</td>
+
+          <td class="p-3 flex gap-2">
+<button
+  [routerLink]="['/admin/view-employee', emp.id]"
+  class="px-3 py-1 bg-blue-500 hover:bg-blue-400 rounded text-xs">
+  View
+</button>
+
+<button
+  [routerLink]="['/admin/edit-employee', emp.id]"
+  class="px-3 py-1 bg-purple-500 hover:bg-purple-400 rounded text-xs">
+  Edit
+</button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

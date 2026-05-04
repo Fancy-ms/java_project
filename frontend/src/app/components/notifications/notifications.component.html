@@ -1,0 +1,118 @@
+<div class="p-6 text-white bg-[#0b0616] min-h-screen">
+
+  <!-- HEADER -->
+  <div class="flex justify-between items-center mb-8">
+
+    <div>
+      <h2 class="text-3xl font-bold flex items-center gap-2">
+        🔔 Notifications
+      </h2>
+      <p class="text-sm text-gray-400">
+        Stay updated with all system activities
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+
+      <button class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">
+        All
+      </button>
+
+      <button class="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 transition shadow-lg">
+        ✓ Mark All Read
+      </button>
+
+    </div>
+  </div>
+
+  <!-- STATS CARDS -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+
+    <div
+      class="p-5 rounded-2xl bg-gradient-to-br from-purple-600/30 to-purple-900/20 border border-purple-500/30 shadow-xl">
+      <p class="text-sm opacity-70">Total</p>
+      <h2 class="text-2xl font-bold">{{ notifications.length }}</h2>
+    </div>
+
+    <div class="p-5 rounded-2xl bg-gradient-to-br from-pink-600/30 to-pink-900/20 border border-pink-500/30 shadow-xl">
+      <p class="text-sm opacity-70">Unread</p>
+      <h2 class="text-2xl font-bold">{{ unreadCount }}</h2>
+    </div>
+
+    <div
+      class="p-5 rounded-2xl bg-gradient-to-br from-green-600/30 to-green-900/20 border border-green-500/30 shadow-xl">
+      <p class="text-sm opacity-70">Success</p>
+      <h2 class="text-2xl font-bold">{{ leaveCount }}</h2>
+    </div>
+
+    <div
+      class="p-5 rounded-2xl bg-gradient-to-br from-orange-600/30 to-orange-900/20 border border-orange-500/30 shadow-xl">
+      <p class="text-sm opacity-70">Warnings</p>
+      <h2 class="text-2xl font-bold">{{ alertCount }}</h2>
+    </div>
+
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div *ngIf="notifications.length === 0" class="text-center text-gray-400 mt-10">
+    🚫 No notifications available
+  </div>
+
+  <!-- NOTIFICATION LIST -->
+  <div class="space-y-5">
+
+    <div *ngFor="let n of notifications"
+      class="p-5 rounded-2xl backdrop-blur-xl border border-white/10 shadow-xl transition hover:scale-[1.01]" [ngClass]="{
+        'bg-gradient-to-r from-green-600/20 to-green-900/10 border-green-500/30': n.type === 'SUCCESS',
+        'bg-gradient-to-r from-yellow-600/20 to-yellow-900/10 border-yellow-500/30': n.type === 'WARNING',
+        'bg-gradient-to-r from-blue-600/20 to-blue-900/10 border-blue-500/30': n.type === 'INFO',
+        'bg-gradient-to-r from-red-600/20 to-red-900/10 border-red-500/30': n.type === 'ERROR'
+      }">
+
+      <!-- TOP -->
+      <div class="flex justify-between items-start">
+
+        <div>
+          <h3 class="font-semibold text-lg">
+            {{ n.message }}
+          </h3>
+
+          <p class="text-xs text-gray-400 mt-1">
+            {{ n.formattedDate }}
+          </p>
+        </div>
+
+        <span class="text-xs px-3 py-1 rounded-full font-bold" [ngClass]="{
+            'bg-green-500/20 text-green-400': n.type === 'SUCCESS',
+            'bg-yellow-500/20 text-yellow-400': n.type === 'WARNING',
+            'bg-blue-500/20 text-blue-400': n.type === 'INFO',
+            'bg-red-500/20 text-red-400': n.type === 'ERROR'
+          }">
+          {{ n.type }}
+        </span>
+
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <!-- ACTION BUTTONS -->
+      <div class="flex gap-3 mt-4">
+
+        <!-- MARK SINGLE -->
+        <button (click)="markSingleRead(n.id)"
+          class="px-3 py-1 text-xs rounded-lg bg-purple-600 hover:bg-purple-700 transition">
+          ✓ Mark as Read
+        </button>
+
+        <!-- DELETE -->
+        <button (click)="deleteNotification(n.id)"
+          class="px-3 py-1 text-xs rounded-lg bg-red-600 hover:bg-red-700 transition">
+          🗑 Delete
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

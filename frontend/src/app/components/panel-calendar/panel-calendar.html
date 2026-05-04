@@ -1,0 +1,210 @@
+<div class="p-6 space-y-6 text-white">
+
+  <!-- HEADER -->
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+    <div>
+      <h2 class="text-3xl font-bold">Leave Calendar</h2>
+      <p class="text-sm text-gray-400">
+        Track employee leaves in real-time
+      </p>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+    <div class="glass-panel p-5 rounded-3xl border-l-4 border-purple-500">
+      <p class="text-xs text-gray-400 uppercase">Leaves This Month</p>
+      <h2 class="text-3xl font-bold mt-1">{{ monthlyLeaves }}</h2>
+    </div>
+
+    <div class="glass-panel p-5 rounded-3xl border-l-4 border-green-500">
+      <p class="text-xs text-gray-400 uppercase">Approved</p>
+      <h2 class="text-3xl font-bold mt-1">{{ approvedLeaves }}</h2>
+    </div>
+
+    <div class="glass-panel p-5 rounded-3xl border-l-4 border-yellow-500">
+      <p class="text-xs text-gray-400 uppercase">Pending</p>
+      <h2 class="text-3xl font-bold mt-1">{{ pendingLeaves }}</h2>
+    </div>
+
+    <div class="glass-panel p-5 rounded-3xl border-l-4 border-pink-500">
+      <p class="text-xs text-gray-400 uppercase">Rejected</p>
+      <h2 class="text-3xl font-bold mt-1">{{ rejectedLeaves }}</h2>
+    </div>
+
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- CALENDAR -->
+    <div class="lg:col-span-2 glass-panel p-8 rounded-[2.5rem]">
+
+      <!-- MONTH NAV -->
+      <div class="flex justify-between items-center mb-8">
+
+        <h2 class="text-2xl font-bold">
+          {{ monthName }} {{ currentYear }}
+        </h2>
+
+        <div class="flex gap-2">
+          <button
+            type="button"
+            (click)="prevMonth()"
+            class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition">
+            ◀
+          </button>
+
+          <button
+            type="button"
+            (click)="nextMonth()"
+            class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition">
+            ▶
+          </button>
+        </div>
+
+      </div>
+
+      <!-- WEEK DAYS -->
+      <div class="grid grid-cols-7 gap-2 mb-3 text-center text-xs font-bold text-gray-400 uppercase">
+        <div *ngFor="let d of weekDays">
+          {{ d }}
+        </div>
+      </div>
+
+      <!-- CALENDAR GRID -->
+      <div class="grid grid-cols-7 gap-2">
+
+        <!-- EMPTY SPACES -->
+        <div *ngFor="let s of startOffset"></div>
+
+        <!-- DAYS -->
+        <div
+          *ngFor="let day of daysInMonth"
+          (click)="selectDay(day)"
+          class="h-14 md:h-16 rounded-xl flex items-center justify-center cursor-pointer transition border border-white/5 hover:bg-white/10"
+          [ngClass]="{
+            'bg-purple-600/40': selectedDay === day,
+            'bg-red-500/20': isLeaveDay(day)
+          }">
+
+          <span class="font-semibold">{{ day }}</span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="glass-panel p-6 md:p-8 rounded-[2.5rem] space-y-6">
+
+      <!-- SELECTED DAY -->
+      <div class="text-center py-8 border border-dashed border-white/10 rounded-3xl">
+
+        <p class="text-gray-400 text-sm">Selected Date</p>
+
+        <h3 class="text-2xl font-bold mt-2">
+          {{ selectedDay ? ('Day ' + selectedDay) : 'Click a date' }}
+        </h3>
+
+      </div>
+
+      <!-- UPCOMING EVENTS -->
+      <div class="space-y-3">
+
+        <ng-container *ngIf="upcoming?.length; else noEvents">
+
+          <div
+            *ngFor="let event of upcoming"
+            class="p-3 rounded-xl bg-white/5 border border-white/10">
+
+            <p class="font-semibold">{{ event.title }}</p>
+
+            <p class="text-xs text-gray-400">
+              {{ event.start }} → {{ event.end }}
+            </p>
+
+            <span class="text-xs"
+              [ngClass]="{
+                'text-green-400': event.color === 'green',
+                'text-red-400': event.color === 'red',
+                'text-yellow-400': event.color === 'orange'
+              }">
+              {{ event.color }}
+            </span>
+
+          </div>
+
+        </ng-container>
+
+        <ng-template #noEvents>
+          <p class="text-gray-400 text-sm">No upcoming events</p>
+        </ng-template>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- POPUP OVERLAY -->
+<div *ngIf="showPopup"
+     class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+  <!-- POPUP BOX -->
+  <div class="w-full max-w-md bg-[#120a24] border border-white/10 rounded-2xl p-6 shadow-2xl">
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold">
+        Day {{ selectedDay }} - Leave Details
+      </h3>
+
+      <button (click)="closePopup()"
+              class="text-gray-400 hover:text-white">
+        ✖
+      </button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="space-y-3 max-h-64 overflow-y-auto">
+
+      <ng-container *ngIf="selectedDateLeaves.length > 0; else noLeave">
+
+        <div *ngFor="let leave of selectedDateLeaves"
+             class="p-3 bg-white/5 rounded-xl border border-white/10">
+
+          <p class="font-semibold">{{ leave.title }}</p>
+
+          <p class="text-xs text-gray-400">
+            {{ leave.start }} → {{ leave.end }}
+          </p>
+
+          <span class="text-xs"
+                [ngClass]="{
+                  'text-green-400': leave.color === 'green',
+                  'text-yellow-400': leave.color === 'orange',
+                  'text-red-400': leave.color === 'red'
+                }">
+            {{ leave.color }}
+          </span>
+
+        </div>
+
+      </ng-container>
+
+      <ng-template #noLeave>
+        <p class="text-gray-400 text-sm text-center">
+          No employee leave on this date
+        </p>
+      </ng-template>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>

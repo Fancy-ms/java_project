@@ -1,0 +1,15 @@
+/* Optional custom styles */
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+input:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.4);
+}
+
+button {
+  transition: all 0.3s ease;
+}

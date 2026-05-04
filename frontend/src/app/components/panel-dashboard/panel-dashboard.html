@@ -1,0 +1,190 @@
+<div class="flex flex-col h-full bg-[#0f071a] p-6 text-white overflow-y-auto">
+  <section class="flex items-center justify-between mb-8">
+    <div class="relative w-1/3">
+      <input type="text" placeholder="Search employees, leave requests..."
+        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50" />
+    </div>
+
+    <div class="flex items-center gap-4">
+      <button (click)="refreshPage()" class="p-2 hover:bg-white/10 rounded-lg transition-colors" title="Refresh">
+        <span class="text-xl">🔄</span>
+      </button>
+      <button (click)="goToNotifications()" class="relative p-2 hover:bg-white/10 rounded-lg transition-colors">
+        <span class="text-xl">🔔</span>
+        <span
+          class="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold">
+          {{ unreadCount }}
+        </span>
+      </button>
+      <div class="flex items-center gap-2 ml-2 bg-white/5 p-1 pr-4 rounded-xl border border-white/10">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-pink-500 to-purple-500"></div>
+        <span class="text-xs font-semibold uppercase tracking-wider">Sarah Admin</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
+    <!-- Total Employees -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6 cursor-pointer" (click)="goToEmployees()">
+      <p class="text-slate-400 text-xs">Total Employees</p>
+      <h2 class="text-3xl font-bold">{{ totalEmployees }}</h2>
+    </div>
+
+    <div routerLink="/admin/active-employees"
+      class="bg-white/5 border border-white/10 rounded-3xl p-6 cursor-pointer hover:bg-white/10 transition">
+
+      <p class="text-slate-400 text-xs">Active Staff</p>
+
+      <h2 class="text-3xl font-bold">{{ activeStaff }}</h2>
+
+    </div>
+
+    <!-- On Leave Today -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6">
+      <p class="text-slate-400 text-xs">On Leave Today</p>
+      <h2 class="text-3xl font-bold">{{ onLeaveToday }}</h2>
+    </div>
+
+    <!-- Pending Requests -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6">
+      <p class="text-slate-400 text-xs">Pending Requests</p>
+      <h2 class="text-3xl font-bold">{{ pendingRequests }}</h2>
+    </div>
+
+  </section>
+
+
+
+
+  <section class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+    <!-- 🔹 Recent Leaves -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
+      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+        <span class="text-purple-400">●</span> Recent Leave Requests
+      </h3>
+
+      <div *ngIf="recentLeaves && recentLeaves.length > 0; else noLeaves">
+
+        <div *ngFor="let leave of recentLeaves"
+          class="flex justify-between items-center bg-white/5 p-3 rounded-xl hover:bg-white/10 transition">
+
+          <div>
+            <p class="text-sm font-semibold">{{ leave.employeeEmail }}</p>
+            <p class="text-xs text-gray-400">
+              {{ leave.startDate }} → {{ leave.endDate }}
+            </p>
+          </div>
+
+          <span class="text-xs px-3 py-1 rounded-full font-bold" [ngClass]="{
+            'bg-green-500/20 text-green-400': leave.status === 'APPROVED',
+            'bg-red-500/20 text-red-400': leave.status === 'REJECTED',
+            'bg-yellow-500/20 text-yellow-400': leave.status === 'PENDING'
+          }">
+            {{ leave.status }}
+          </span>
+
+        </div>
+
+      </div>
+
+      <ng-template #noLeaves>
+        <p class="text-gray-400 text-sm text-center">No recent leave requests</p>
+      </ng-template>
+    </div> <!-- ✅ CLOSE HERE -->
+
+
+    <!-- 🔹 Upcoming Events (Separate card) -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md h-full">
+
+      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+        <span class="text-cyan-400">●</span> Upcoming Events
+      </h3>
+
+      <div *ngIf="upcomingEvents && upcomingEvents.length > 0; else noEvents" class="space-y-3">
+
+        <div *ngFor="let event of upcomingEvents" class="p-3 rounded-xl bg-white/5 border border-white/10">
+
+          <p class="font-semibold">{{ event.title }}</p>
+
+          <p class="text-xs text-gray-400">
+            {{ event.meetingDateTime || event.start || event.date }}
+          </p>
+
+          <span class="text-xs" [ngClass]="{
+          'text-green-400': event.color === 'green',
+          'text-red-400': event.color === 'red',
+          'text-yellow-400': event.color === 'orange'
+        }">
+            Status: {{ event.color }}
+          </span>
+
+        </div>
+
+      </div>
+
+      <ng-template #noEvents>
+        <p class="text-gray-400 text-sm text-center">No upcoming events</p>
+      </ng-template>
+
+    </div>
+
+  </section>
+
+  <section class="bg-white/5 border border-white/10 rounded-3xl p-6">
+    <h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6">Quick Actions</h3>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <button (click)="goToApprovedEmployees()"
+        class="flex items-center justify-center gap-3 py-4 rounded-2xl bg-[#00a86b] hover:brightness-110 transition-all font-bold">
+        ✔️ Approved Employees
+      </button>
+
+      <button routerLink="/admin/add-employee"
+        class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-2xl flex items-center justify-center gap-2 font-bold hover:brightness-110 transition-all cursor-pointer">
+        <span class="text-xl">👤+</span>
+        Add Employee
+      </button>
+
+      <button
+  (click)="exportExcel()"
+  class="flex items-center justify-center gap-3 py-4 rounded-2xl bg-green-600 hover:brightness-110 transition-all font-bold">
+  📊 Export Excel
+</button>
+
+      <button routerLink="/admin//schedule-meeting"
+        class="flex items-center justify-center gap-3 py-4 rounded-2xl bg-[#f37021] hover:brightness-110 transition-all font-bold">
+        <span>📅</span> Schedule Meeting
+      </button>
+    </div>
+  </section>
+
+
+  <!-- 🔥 APPROVED EMPLOYEES SECTION -->
+  <!-- <div *ngIf="showApprovedList" class="mt-8 bg-white/5 border border-white/10 rounded-3xl p-6">
+
+    <h3 class="text-lg font-bold mb-4 text-green-400">
+      ✔️ Approved Employees
+    </h3>
+
+    <div *ngFor="let emp of approvedEmployees" class="p-3 mb-2 bg-white/5 rounded-xl border border-green-500">
+
+      <p><b>Email:</b>
+        {{ emp.employeeEmail || emp.email || emp.userEmail || emp.employee_email || 'N/A' }}
+      </p>
+      <p><b>Status:</b> {{ emp.status }}</p>
+      <span class="text-green-400 font-bold">
+        {{ emp.status }}
+      </span>
+
+
+    </div>
+
+    <ng-template #noApproved>
+      <p class="text-gray-400 text-sm text-center">
+        No approved employees found
+      </p>
+    </ng-template> -->
+
+  <!-- </div> -->
+</div>

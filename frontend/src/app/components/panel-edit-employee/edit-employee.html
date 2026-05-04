@@ -1,0 +1,95 @@
+<div class="min-h-screen bg-[#0f071a] flex items-center justify-center p-6 text-white">
+
+  <div class="w-full max-w-xl bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
+
+    <h2 class="text-2xl font-bold mb-6 text-center">Edit Employee</h2>
+
+    <!-- Loader -->
+    <div *ngIf="loading" class="text-center py-10 text-gray-400">
+      Loading employee data...
+    </div>
+
+    <!-- Form -->
+    <form *ngIf="!loading"
+          (ngSubmit)="updateEmployee()"
+          #f="ngForm"
+          class="space-y-4">
+
+      <!-- Name -->
+      <div>
+        <input
+          [(ngModel)]="employee.name"
+          name="name"
+          placeholder="Full Name"
+          required
+          minlength="3"
+          #name="ngModel"
+          class="w-full p-3 rounded-xl bg-white/10 border border-white/20"
+        />
+        <p *ngIf="name.touched && name.invalid" class="text-red-400 text-sm">
+          Minimum 3 characters required
+        </p>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <input
+          [(ngModel)]="employee.email"
+          name="email"
+          placeholder="Email"
+          required
+          email
+          #email="ngModel"
+          class="w-full p-3 rounded-xl bg-white/10 border border-white/20"
+        />
+        <p *ngIf="email.touched && email.invalid" class="text-red-400 text-sm">
+          Enter valid email
+        </p>
+      </div>
+
+      <!-- Department -->
+      <div>
+        <input
+          [(ngModel)]="employee.department"
+          name="department"
+          placeholder="Department"
+          #department="ngModel"
+          class="w-full p-3 rounded-xl bg-white/10 border border-white/20"
+        />
+      </div>
+
+      <!-- Position -->
+      <div>
+        <input
+          [(ngModel)]="employee.position"
+          name="position"
+          placeholder="Position"
+          #position="ngModel"
+          class="w-full p-3 rounded-xl bg-white/10 border border-white/20"
+        />
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex gap-4 pt-4">
+
+        <button
+          type="button"
+          (click)="goBack()"
+          class="flex-1 bg-gray-600 hover:bg-gray-500 py-3 rounded-xl font-bold transition-all">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          [disabled]="f.invalid || loading"
+          class="flex-1 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-500 py-3 rounded-xl font-bold transition-all">
+          {{ loading ? 'Updating...' : 'Update Employee' }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

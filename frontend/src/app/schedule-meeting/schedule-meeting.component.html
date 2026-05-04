@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-[#0b0616] flex items-center justify-center p-6 text-white">
+
+  <!-- CARD -->
+  <div class="w-full max-w-xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+
+    <!-- HEADER -->
+    <div class="mb-6">
+      <h2 class="text-3xl font-bold">📅 Schedule Meeting</h2>
+      <p class="text-sm text-gray-400 mt-1">
+        Create and schedule a new team meeting
+      </p>
+    </div>
+
+    <!-- FORM -->
+    <div class="space-y-5">
+
+      <!-- TITLE -->
+      <div>
+        <label class="text-xs text-gray-400">Meeting Title *</label>
+        <input type="text"
+          placeholder="Enter meeting title"
+          [(ngModel)]="meeting.title"
+          class="w-full mt-1 p-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500" />
+      </div>
+
+      <!-- DATE + TIME -->
+      <div class="grid grid-cols-2 gap-4">
+
+        <div>
+          <label class="text-xs text-gray-400">Date *</label>
+          <input type="date"
+            [(ngModel)]="meeting.date"
+            class="w-full mt-1 p-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-purple-500" />
+        </div>
+
+        <div>
+          <label class="text-xs text-gray-400">Time *</label>
+          <input type="time"
+            [(ngModel)]="meeting.time"
+            class="w-full mt-1 p-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-purple-500" />
+        </div>
+
+      </div>
+
+      <!-- PARTICIPANTS -->
+      <div>
+        <label class="text-xs text-gray-400">Participants (Emails)</label>
+
+        <input type="text"
+          placeholder="example@gmail.com, hr@company.com"
+          [(ngModel)]="meeting.participants"
+          (input)="onParticipantsChange()"
+          class="w-full mt-1 p-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500" />
+
+        <!-- ERROR -->
+        <p *ngIf="participantError" class="text-red-400 text-xs mt-1">
+          ⚠️ Invalid email format detected
+        </p>
+      </div>
+
+      <!-- PARTICIPANTS PREVIEW -->
+      <div *ngIf="participantsArray.length > 0" class="bg-white/5 p-3 rounded-xl border border-white/10">
+        <p class="text-xs text-gray-400 mb-2">Participants Preview:</p>
+
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let p of participantsArray"
+            class="bg-purple-600/30 px-2 py-1 rounded-lg text-xs">
+            {{ p }}
+          </span>
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div>
+        <label class="text-xs text-gray-400">Description</label>
+        <textarea
+          rows="3"
+          [(ngModel)]="meeting.description"
+          placeholder="Optional meeting details..."
+          class="w-full mt-1 p-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+      </div>
+
+      <!-- ACTION BUTTON -->
+      <button
+        (click)="saveMeeting()"
+        [disabled]="loading"
+        class="w-full mt-4 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 font-bold hover:scale-[1.02] transition-all shadow-lg disabled:opacity-50">
+
+        {{ loading ? 'Scheduling...' : '📅 Schedule Meeting' }}
+
+      </button>
+
+    </div>
+
+  </div>
+</div>
