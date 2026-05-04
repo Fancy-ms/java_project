@@ -25,10 +25,12 @@
     "strictInjectionParameters": false,
     "strictInputAccessModifiers": false,,
     "strictTemplates": false,
-    "strictAttributeTypes": false,
+    "strictAttributeTypes": false, 
     "strictOutputEventTypes": false,
     "strictDomEventTypes": false,
     "strictNullChecks": false,
     "strictPropertyInitialization": false
+
+    
   }
 }
