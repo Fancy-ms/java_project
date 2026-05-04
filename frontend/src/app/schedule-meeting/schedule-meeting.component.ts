@@ -80,7 +80,7 @@ export class ScheduleMeetingComponent {
         alert('✅ Meeting Scheduled & Emails Sent!');
         this.resetForm();
       },
-      error: (err) => {
+      error: (err: any) => {
         this.loading = false;
         console.error('Meeting Error:', err);
         alert('❌ Failed to schedule meeting');
