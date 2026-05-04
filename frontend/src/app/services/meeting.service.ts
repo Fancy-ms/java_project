@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class MeetingService {
 
-  private baseUrl = 'http://localhost:8080/api/meetings';
+  private baseUrl = 'hjavaproject-production-25e8.up.railway.app';
 
   constructor(private http: HttpClient) {}
 
